@@ -26,5 +26,6 @@ let dbConnect = () => {
     console.log('DB connected');
   })
 }
-dbConnect()
+
 bot.launch()
+dbConnect()

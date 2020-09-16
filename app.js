@@ -1,41 +1,83 @@
 require('dotenv').config()
 const { Telegraf } = require('telegraf')
 const bot = new Telegraf(process.env.BOT_TOKEN)
-const request = require('request');
+
+const {
+  Extra,
+  Markup,
+  Stage,
+  session,
+} = Telegraf
+
+const SceneGenerator = require('./src/scenes/addBook.scene')
+const curScene = new SceneGenerator()
+
+const captionScene = curScene.GenCaptionScene()
+const linkScene = curScene.GenLinkScene()
+const tagScene = curScene.GenTagScene()
+const photoScene = curScene.GenPhotoScene()
+const bookScene = curScene.GenBookScene()
+
+const Book = require('./src/models/book.schema')
+
 
 bot.use(Telegraf.log())
 
-bot.start((ctx) => ctx.reply('Здравствуйте, что бы начать напишите /find и ключевое слово книги! \n Пример: /find javascript'))
+const stage = new Stage([captionScene, linkScene, tagScene, photoScene, bookScene])
 
-bot.command('find', (ctx) => {
+
+bot.use(session())
+bot.use(stage.middleware())
+
+
+bot.start((ctx) => ctx.reply('Здравствуйте, что бы начать напишите /find и ключевое слово книги! \n Например: /find javascript'))
+
+bot.command('find', async  (ctx) => {
   let msg = ctx.message.text
   let msgArray = msg.split(' ')
   msgArray.shift()
-  msg = msgArray.join(' ').toLowerCase()
+  msg = msgArray.join(' ')
+  let regex = new RegExp(`${msg}`, 'i')
 
-  request(`https://www.googleapis.com/books/v1/volumes?q=${msg}`, (error, res, body) => {
-    if (error) res.status(500).send({message: error});
-    try {
-      body = JSON.parse(body)
-      let group = []
-      for (let i = 0; i < body.items.length; i++) {
-        let photo
-        if (body.items[i].volumeInfo && "imageLinks" in body.items[i].volumeInfo) {
-          photo = body.items[i].volumeInfo?.imageLinks.thumbnail
-          group.push({
-            caption: `Название: ${body.items[i].volumeInfo.title} \n \nСсылка на книгу: ${body.items[i].volumeInfo.previewLink} \n`,
-            media: photo,
-            type: 'photo',
-          })
-        } else {
-          photo = ''
-        }
-      }
-      ctx.replyWithMediaGroup(group)
-    } catch (error) {
-      console.log(error)
+  let books = await Book.find({caption: regex}).exec()
+  if (books.length < 1) {
+    books = await Book.find({tag: { $in: regex }}).exec()
+  }
+
+  try {
+    let group = []
+    for (let i = 0; i < books.length; i++) {
+      let photo = books[i].media
+      group.push({
+        caption: `Название: ${books[i].caption}  \n \nСсылка на книгу: ${books[i].link} \n`,
+        media: photo,
+        type: 'photo',
+      })
     }
-  })
+    await ctx.replyWithMediaGroup(group)
+  } catch (error) {
+    console.log(error)
+  }
+
+})
+
+bot.command('add', async (ctx) => {
+  ctx.scene.enter('caption')
+})
+
+bot.command('lib', (ctx) => {
+ ctx.telegram.sendMessage(ctx.chat.id, 'В какой разделы вы хотите добавить книгу?', {
+   reply_markup: {
+     inline_keyboard: [
+       [{text: 'JavaScript', callback_data:'JS'}],
+       ]
+   }
+ })
+})
+
+bot.action('JS', (ctx) => {
+  ctx.deleteMessage()
+  ctx.reply('JS')
 })
 
 module.exports = bot
