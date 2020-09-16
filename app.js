@@ -52,26 +52,43 @@ bot.command('find', async  (ctx) => {
     regex = new RegExp(`${msg}`, 'i')
     books = await Book.find({caption: regex}).exec()
 
-    if (books.length < 1) books = await Book.find({tag: { $in: regex }}).exec()
+    if (books.length < 1) {
+      books = await Book.find({tag: { $in: regex }}).exec()
+      try {
+        let group = []
+        for (let i = 0; i < books.length; i++) {
+          let photo = books[i].media
+          group.push({
+            caption: `Название: ${books[i].caption}  \n \nСсылка на книгу: ${books[i].link} \n`,
+            media: photo,
+            type: 'photo',
+          })
+        }
+        await ctx.replyWithMediaGroup(group)
+      } catch (error) {
+        console.log(error)
+      }
+    }
 
   } else {
       books = await Book.find().exec()
+    try {
+      let group = []
+      for (let i = 0; i < books.length; i++) {
+        let photo = books[i].media
+        group.push({
+          caption: `Название: ${books[i].caption}  \n \nСсылка на книгу: ${books[i].link} \n`,
+          media: photo,
+          type: 'photo',
+        })
+      }
+      await ctx.replyWithMediaGroup(group)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  try {
-    let group = []
-    for (let i = 0; i < books.length; i++) {
-      let photo = books[i].media
-      group.push({
-        caption: `Название: ${books[i].caption}  \n \nСсылка на книгу: ${books[i].link} \n`,
-        media: photo,
-        type: 'photo',
-      })
-    }
-    await ctx.replyWithMediaGroup(group)
-  } catch (error) {
-    console.log(error)
-  }
+
 })
 
 bot.command('add', async (ctx) => {
