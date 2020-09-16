@@ -21,8 +21,6 @@ const bookScene = curScene.GenBookScene()
 const Book = require('./src/models/book.schema')
 
 
-bot.use(Composer.log())
-
 const stage = new Stage([captionScene, linkScene, tagScene, photoScene, bookScene])
 
 
@@ -77,21 +75,6 @@ bot.command('add', async (ctx) => {
     ctx.reply('У вас не достаточно прав')
   }
 
-})
-
-bot.command('lib', (ctx) => {
- ctx.telegram.sendMessage(ctx.chat.id, 'В какой разделы вы хотите добавить книгу?', {
-   reply_markup: {
-     inline_keyboard: [
-       [{text: 'JavaScript', callback_data:'JS'}],
-       ]
-   }
- })
-})
-
-bot.action('JS', (ctx) => {
-  ctx.deleteMessage()
-  ctx.reply('JS')
 })
 
 module.exports = bot
