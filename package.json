@@ -1,0 +1,27 @@
+{
+  "name": "ElbrusLibrary",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.10.5",
+    "request": "^2.88.2",
+    "telegraf": "^3.38.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RostislavBartenev/ElbrusLibrary.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RostislavBartenev/ElbrusLibrary/issues"
+  },
+  "homepage": "https://github.com/RostislavBartenev/ElbrusLibrary#readme"
+}
