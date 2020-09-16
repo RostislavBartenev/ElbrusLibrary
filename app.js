@@ -1,13 +1,20 @@
 require('dotenv').config()
-const { Composer } = require('micro-bot')
-const bot = new Composer
+const { Telegraf } = require('telegraf')
+const bot = new Telegraf(process.env.BOT_TOKEN)
+
+const BOT_TOKEN = process.env.BOT_TOKEN || '';
+const PORT = process.env.PORT || 3000;
+const URL = process.env.URL || '';
 
 const {
   Extra,
   Markup,
   Stage,
   session,
-} = Composer
+} = Telegraf
+
+bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
+bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT)
 
 const SceneGenerator = require('./src/scenes/addBook.scene')
 const curScene = new SceneGenerator()
@@ -20,6 +27,8 @@ const bookScene = curScene.GenBookScene()
 
 const Book = require('./src/models/book.schema')
 
+
+bot.use(Telegraf.log())
 
 const stage = new Stage([captionScene, linkScene, tagScene, photoScene, bookScene])
 

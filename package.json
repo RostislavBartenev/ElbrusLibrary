@@ -5,7 +5,6 @@
   "main": "app.js",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "micro-bot": "^2.5.3",
     "mongoose": "^5.10.5",
     "telegraf": "^3.38.0"
   },

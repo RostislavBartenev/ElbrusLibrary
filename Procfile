@@ -1,1 +1,1 @@
-web: micro-bot -p $PORT
+heroku logs --tail
