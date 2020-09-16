@@ -72,8 +72,6 @@ bot.command('find', async  (ctx) => {
   } catch (error) {
     console.log(error)
   }
-
-
 })
 
 bot.command('add', async (ctx) => {
