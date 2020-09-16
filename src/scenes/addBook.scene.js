@@ -61,14 +61,9 @@ class SceneGenerator {
     photo.enter(async (ctx) => {
       await ctx.reply('Отправьте фото для обложки')
     })
-    photo.on('text', async (ctx) => {
-      this.photo = ctx.message.text.trim()
-      if (photo !== '') {
-        await ctx.scene.enter('book')
-      } else {
-        await ctx.reply('Вставьте ссылку на фото')
-        await ctx.scene.reenter()
-      }
+    photo.on('photo', async (ctx) => {
+      this.photo = ctx.message.photo[0].file_id
+      await ctx.scene.enter('book')
     })
     photo.on('message', (ctx) => ctx.reply('Вставьте ссылку на фото'))
     return photo
