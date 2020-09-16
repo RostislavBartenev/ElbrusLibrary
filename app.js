@@ -7,7 +7,7 @@ const {
   Markup,
   Stage,
   session,
-} = Telegraf
+} = Composer
 
 const SceneGenerator = require('./src/scenes/addBook.scene')
 const curScene = new SceneGenerator()
@@ -21,7 +21,7 @@ const bookScene = curScene.GenBookScene()
 const Book = require('./src/models/book.schema')
 
 
-bot.use(Telegraf.log())
+bot.use(Composer.log())
 
 const stage = new Stage([captionScene, linkScene, tagScene, photoScene, bookScene])
 
