@@ -62,7 +62,13 @@ bot.command('find', async  (ctx) => {
 })
 
 bot.command('add', async (ctx) => {
-  ctx.scene.enter('caption')
+  console.log(ctx.message.chat.id, typeof ctx.message.chat.id )
+  if (ctx.message.chat.id === +process.env.ADMIN) {
+    ctx.scene.enter('caption')
+  } else {
+    ctx.reply('У вас не достаточно прав')
+  }
+
 })
 
 bot.command('lib', (ctx) => {

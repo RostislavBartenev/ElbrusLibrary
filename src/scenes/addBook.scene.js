@@ -59,13 +59,22 @@ class SceneGenerator {
   GenPhotoScene() {
     const photo = new Scene('photo')
     photo.enter(async (ctx) => {
-      await ctx.reply('Отправьте фото для обложки')
+      await ctx.reply('Отправьте фото для обложки или вставьте ссылку на картинку')
     })
     photo.on('photo', async (ctx) => {
       this.photo = ctx.message.photo[0].file_id
       await ctx.scene.enter('book')
     })
-    photo.on('message', (ctx) => ctx.reply('Вставьте ссылку на фото'))
+    photo.on('text', async (ctx) => {
+      this.photo = ctx.message.text.trim()
+      if (photo !== '') {
+        await ctx.scene.enter('book')
+      } else {
+        await ctx.reply('Вставьте ссылку на фото')
+        await ctx.scene.reenter()
+      }
+    })
+    photo.on('message', (ctx) => ctx.reply('Что-то не так'))
     return photo
   }
 
