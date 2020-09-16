@@ -47,20 +47,23 @@ bot.command('find', async  (ctx) => {
 
   let books, regex
 
+  console.log(msg)
+
   if (msg) {
 
     regex = new RegExp(`${msg}`, 'i')
     books = await Book.find({caption: regex}).exec()
 
     if (books.length < 1) {
-      return books = await Book.find({tag: {$in: regex}}).exec()
+       books = await Book.find({tag: {$in: regex}}).exec()
     }
 
   } else {
-      return books = await Book.find().exec()
+       books = await Book.find().exec()
   }
 
   try {
+    console.log(books)
     let group = []
     for (let i = 0; i < books.length; i++) {
       let photo = books[i].media
