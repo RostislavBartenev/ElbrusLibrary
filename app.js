@@ -37,11 +37,18 @@ bot.command('find', async  (ctx) => {
   let msgArray = msg.split(' ')
   msgArray.shift()
   msg = msgArray.join(' ')
-  let regex = new RegExp(`${msg}`, 'i')
 
-  let books = await Book.find({caption: regex}).exec()
-  if (books.length < 1) {
-    books = await Book.find({tag: { $in: regex }}).exec()
+  let books, regex
+
+  if (msg) {
+
+    regex = new RegExp(`${msg}`, 'i')
+    books = await Book.find({caption: regex}).exec()
+
+    if (books.length < 1) books = await Book.find({tag: { $in: regex }}).exec()
+
+  } else {
+      books = await Book.find().exec()
   }
 
   try {
@@ -58,6 +65,7 @@ bot.command('find', async  (ctx) => {
   } catch (error) {
     console.log(error)
   }
+
 
 })
 
