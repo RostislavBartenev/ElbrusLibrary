@@ -53,11 +53,11 @@ bot.command('find', async  (ctx) => {
     books = await Book.find({caption: regex}).exec()
 
     if (books.length < 1) {
-      books = await Book.find({tag: {$in: regex}}).exec()
+      return books = await Book.find({tag: {$in: regex}}).exec()
     }
 
   } else {
-      books = await Book.find().exec()
+      return books = await Book.find().exec()
   }
 
   try {
