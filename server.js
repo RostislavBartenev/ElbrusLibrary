@@ -13,12 +13,12 @@ const options = {
 }
 
 const {
-  DB_HOST,
   DB_NAME,
-  DB_PORT,
+  DB_USER,
+  DB_PASSWORD,
 } = process.env
 
-const dbConnectionURL = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
+const dbConnectionURL = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.jhicz.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`
 
 let dbConnect = () => {
   mongoose.connect(dbConnectionURL, options, (err) => {
