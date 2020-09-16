@@ -27,5 +27,5 @@ let dbConnect = () => {
   })
 }
 
-bot.launch()
+
 dbConnect()
