@@ -31,9 +31,38 @@ bot.use(session())
 bot.use(stage.middleware())
 
 
-bot.start((ctx) => ctx.reply('Здравствуйте, что бы найти книгу напишите /find и ключевое слово книги! \n Например: /find javascript или /find что бы увидеть все доступные книги'))
+bot.start((ctx) => ctx.reply('Здравствуйте, что бы найти книгу напишите /findByName или /findByTag и ключевое слово книги! \n Например: /findByName javascript или /find что бы увидеть все доступные книги'))
 
-bot.command('find', async  (ctx) => {
+bot.command('findByTag', async (ctx) => {
+  let msg = ctx.message.text
+  let msgArray = msg.split(' ')
+  msgArray.shift()
+  msg = msgArray.join(' ')
+
+  let books,
+      regex = new RegExp(`${msg}`, 'i')
+
+  books = await Book.find({tag: {$in: regex}}).limit(10).exec()
+
+  try {
+    console.log(books)
+    let group = []
+    for (let i = 0; i < books.length; i++) {
+      let photo = books[i].media
+      group.push({
+        caption: `Название: ${books[i].caption}  \n \nСсылка на книгу: ${books[i].link} \n`,
+        media: photo,
+        type: 'photo',
+      })
+    }
+    await ctx.replyWithMediaGroup(group)
+  } catch (error) {
+    console.log(error)
+  }
+
+})
+
+bot.command('findByName', async  (ctx) => {
   let msg = ctx.message.text
   let msgArray = msg.split(' ')
   msgArray.shift()
@@ -46,14 +75,12 @@ bot.command('find', async  (ctx) => {
   if (msg) {
 
     regex = new RegExp(`${msg}`, 'i')
-    books = await Book.find({caption: regex}).exec()
-
-    if (books.length < 1) {
-       books = await Book.find({tag: {$in: regex}}).exec()
-    }
+    books = await Book.find({caption: regex}).limit(10).exec()
 
   } else {
-       books = await Book.find().limit(10).exec()
+
+    books = await Book.find().limit(10).exec()
+
   }
 
   try {
