@@ -2,10 +2,6 @@ require('dotenv').config()
 const { Telegraf } = require('telegraf')
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
-const BOT_TOKEN = process.env.BOT_TOKEN || '';
-const PORT = process.env.PORT || 3000;
-const URL = process.env.URL || '';
-
 const {
   Extra,
   Markup,
@@ -104,8 +100,6 @@ bot.command('addAdmin', async (ctx) => {
     console.log(msg, typeof msg)
 
     let isAdmin = await Admin.findOne({tg_id: msg})
-
-    console.log(isAdmin)
 
     if (isAdmin) {
       ctx.reply('Он уже является администратором')
