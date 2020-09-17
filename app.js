@@ -53,7 +53,7 @@ bot.command('find', async  (ctx) => {
     }
 
   } else {
-       books = await Book.find().exec().limit(10)
+       books = await Book.find().limit(10).exec()
   }
 
   try {
