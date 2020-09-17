@@ -33,7 +33,7 @@ bot.use(stage.middleware())
 
 bot.start((ctx) => ctx.reply('Здравствуйте, что бы найти книгу напишите /findByName или /findByTag и ключевое слово книги! \n Например: /findByName javascript'))
 
-bot.command('findByTag', async (ctx) => {
+bot.command('tag', async (ctx) => {
   let msg = ctx.message.text
   let msgArray = msg.split(' ')
   msgArray.shift()
@@ -62,7 +62,7 @@ bot.command('findByTag', async (ctx) => {
 
 })
 
-bot.command('findByName', async  (ctx) => {
+bot.command('name', async  (ctx) => {
   let msg = ctx.message.text
   let msgArray = msg.split(' ')
   msgArray.shift()
