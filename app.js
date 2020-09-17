@@ -31,7 +31,7 @@ bot.use(session())
 bot.use(stage.middleware())
 
 
-bot.start((ctx) => ctx.reply('Здравствуйте, что бы найти книгу напишите /findByName или /findByTag и ключевое слово книги! \n Например: /findByName javascript или /find что бы увидеть все доступные книги'))
+bot.start((ctx) => ctx.reply('Здравствуйте, что бы найти книгу напишите /findByName или /findByTag и ключевое слово книги! \n Например: /findByName javascript'))
 
 bot.command('findByTag', async (ctx) => {
   let msg = ctx.message.text
