@@ -29,3 +29,8 @@ let dbConnect = () => {
 
 
 dbConnect()
+
+// bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
+// bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT)
+
+bot.launch()
